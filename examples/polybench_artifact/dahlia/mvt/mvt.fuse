@@ -1,0 +1,21 @@
+decl A: float[400][400];
+decl y1: float[400];
+decl y2: float[400];
+decl x1: float[400];
+decl x2: float[400];
+
+for (let i = 0..400) {
+  for (let j = 0..400) {
+    let acc = x1[i] + A[i][j] * y1[j];
+  } combine {
+    x1[i] += acc;
+  }
+}
+---
+for (let i = 0..400) {
+  for (let j = 0..400) {
+    let acc = x2[i] + A[j][i] * y2[j];
+  } combine {
+    x2[i] += acc;
+  }
+}

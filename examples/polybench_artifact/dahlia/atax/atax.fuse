@@ -1,0 +1,24 @@
+decl A: float[390][410];
+decl x: float[410];
+decl y: float[410];
+decl tmp: float[390];
+
+for (let i = 0..410) {
+  y[i] := 0.0;
+}
+---
+for (let i = 0..390) {
+  tmp[i] := 0.0;
+  ---
+  for (let j = 0..410) {
+    let mul = A[i][j] * x[j];
+  } combine {
+    tmp[i] += mul;
+  }
+  ---
+  for (let j = 0..410) {
+    let mul = A[i][j] * tmp[i];
+  } combine {
+    y[j] += mul;
+  }
+}

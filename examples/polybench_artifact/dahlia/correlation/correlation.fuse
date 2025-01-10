@@ -1,0 +1,69 @@
+decl float_n: float;
+decl data: float[260][240];
+decl mean: float[240];
+decl stddev: float[240];
+decl corr: float[240][240];
+
+for (let j = 0..240) {
+  mean[j] := 0.0;
+  ---
+  for (let i = 0..260) {
+    let sum = data[i][j];
+  } combine {
+    mean[j] += sum / float_n;
+  }
+}
+---
+for (let j = 0..240) {
+  stddev[j] := 0.0;
+  ---
+  for (let i = 0..260) {
+    let variance = (data[i][j] - mean[j]) * (data[i][j] - mean[j]);
+  } combine {
+    stddev[j] += variance / float_n;
+  }
+  ---
+  // let s = sqrt(stddev[j]);
+  let s = stddev[j];
+  ---
+  stddev[j] := s;
+}
+---
+for (let i = 0..260) {
+  for (let j = 0..240) {
+    let sub = data[i][j] - mean[j];
+    ---
+    data[i][j] := sub;
+    ---
+    // let div = data[i][j] / sqrt(float_n) * stddev[j];
+    let div = data[i][j] / float_n * stddev[j];
+    ---
+    data[i][j] := div;
+  }
+}
+---
+for (let i = 0..239) {
+  corr[i][i] := 1.0;
+  ---
+  for (let j = 0..240) {
+    if (j >= i + 1) {
+      corr[i][j] := 0.0;
+      ---
+      for (let k = 0..260) {
+        let ki = data[k][i];
+        ---
+        let kj = data[k][j];
+        ---
+        let add = corr[i][j] + ki * kj;
+        ---
+        corr[i][j] := add;
+      }
+      ---
+      let ij = corr[i][j];
+      ---
+      corr[j][i] := ij;
+    }
+  }
+}
+---
+corr[239][239] := 1.0;

@@ -1,0 +1,19 @@
+decl A: float[410][390];
+decl p: float[390];
+decl r: float[410];
+decl q: float[410];
+decl s: float[390];
+
+for (let i = 0..390) {
+  s[i] := 0.0;
+}
+---
+for (let i = 0..410) {
+  for (let j = 0..390) {
+    let mul1 = A[i][j] * r[i];
+    let mul2 = A[i][j] * p[j];
+  } combine {
+    s[j] += mul1;
+    q[i] += mul2;
+  }
+}

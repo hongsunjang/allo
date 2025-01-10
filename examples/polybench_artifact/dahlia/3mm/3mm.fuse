@@ -1,0 +1,43 @@
+decl E: float[180][190];
+decl A: float[180][200];
+decl B: float[200][190];
+decl F: float[190][210];
+decl C: float[190][220];
+decl D: float[220][210];
+decl G: float[180][210];
+
+for (let i = 0..180) {
+  for (let j = 0..190) {
+    E[i][j] := 0.0;
+    ---
+    for (let k = 0..200) {
+      let mul = A[i][k] * B[k][j];
+    } combine {
+      E[i][j] += mul;
+    }
+  }
+}
+---
+for (let i = 0..190) {
+  for (let j = 0..210) {
+    F[i][j] := 0.0;
+    ---
+    for (let k = 0..220) {
+      let mul = C[i][k] * D[k][j];
+    } combine {
+      F[i][j] += mul;
+    }
+  }
+}
+---
+for (let i = 0..180) {
+  for (let j = 0..210) {
+    G[i][j] := 0.0;
+    ---
+    for (let k = 0..190) {
+      let mul = E[i][k] * F[k][j];
+    } combine {
+      G[i][j] += mul;
+    }
+  }
+}

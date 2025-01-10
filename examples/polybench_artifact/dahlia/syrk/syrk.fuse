@@ -1,0 +1,26 @@
+decl alpha: float;
+decl beta: float;
+decl A: float[240][240];
+decl C: float[240][240];
+
+for (let i = 0..240) {
+  for (let j = 0..240) {
+    if (j < i + 1) {
+      let acc = C[i][j] * beta;
+      ---
+      C[i][j] := acc;
+    }
+  }
+  ---
+  for (let k = 0..200) {
+    for (let j = 0..240) {
+      if (j < i + 1) {
+        let a = A[j][k];
+        ---
+        let acc = C[i][j] + alpha * A[i][k] * a;
+        ---
+        C[i][j] := acc;
+      }
+    }
+  }
+}
