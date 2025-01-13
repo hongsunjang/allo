@@ -73,16 +73,21 @@ set hls_prj out.prj
 open_project ${hls_prj} -reset
 
 open_solution -reset solution1 -flow_target vivado
-
 """
+
     out_str += f'# Top function of the design is "{top}"\n'
     out_str += f"set_top {top}\n"
+
     out_str += """
 # Add design and testbench files
 add_files kernel.cpp
-add_files -tb host.cpp -cflags "-std=gnu++0x"
+add_files -tb host.cpp -cflags "-I. -std=gnu++0x"
+add_files -tb xcl2.cpp -cflags "-I. -lOpenCL -std=gnu++0x"
+
 open_solution "solution1"
 """
+
+
     device = configs["device"]
     frequency = configs["frequency"]
     mode = configs["mode"]
@@ -97,6 +102,7 @@ open_solution "solution1"
     out_str += "# Run HLS\n"
     if "csim" in mode or "sw_emu" in mode:
         out_str += "csim_design -O\n"
+        assert False, print( "Not working..", configs )
     if "csyn" in mode or "debug" in mode:
         out_str += "csynth_design\n"
     if "cosim" in mode or "hw_emu" in mode:
@@ -181,6 +187,10 @@ class HLSModule:
             configs = new_configs
         else:
             configs = DEFAULT_CONFIG
+        
+        # Override mode into config
+        configs['mode'] = mode
+
         with Context() as ctx, Location.unknown():
             allo_d.register_dialect(ctx)
             self.module = Module.parse(str(mod), ctx)

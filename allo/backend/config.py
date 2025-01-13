@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 DEFAULT_CONFIG = {
-    "device": "u280",
+    "device": "u50",
     "frequency": 300,
     "mode": "csim|csynth|cosim|impl",
 }
@@ -23,6 +23,7 @@ PART_NUMBER = {
     "vhk158": "xcvh1582-vsva3697-2MP-e-S-es1",
     # Alveo
     # https://github.com/Xilinx/XilinxBoardStore/pull/434
+    "u50":  "xcu50-fsvh2104-2-e",
     "u200": "xcu200-fsgd2104-2-e",
     "u250": "xcu250-figd2104-2L-e",
     "u280": "xcu280-fsvh2892-2L-e",
